@@ -14,8 +14,8 @@ while IFS= read -r arquivo; do
     classe=${arquivo#"$classes/"}
     classe=${classe%.class}
     classe=${classe//\//.}
-    case "$classe" in
-        *Verificacao*)
+    case "${arquivo##*/}" in
+        Verificacao*.class)
             printf 'Verificando %s\n' "$classe"
             "$java" -ea -cp "$classes" "$classe"
             verificacoes=$((verificacoes + 1))
@@ -28,11 +28,14 @@ while IFS= read -r arquivo; do
             demos=$((demos + 1))
             ;;
     esac
-done < <(find "$classes" -type f \( -name 'Verificacao*.class' -o -name 'Demo*.class' \) ! -name '*$*' | sort)
+done < <(find "$classes" -type f \
+    \( -name 'Verificacao*.class' -o -name 'Demo*.class' -o -name 'Gabarito*.class' \) \
+    ! -name '*$*' | sort)
 
 if (( verificacoes == 0 || demos == 0 )); then
     printf 'Esperava encontrar verificações e demonstrações.\n' >&2
     exit 1
 fi
 
-printf '%d verificações e %d demonstrações executadas com sucesso.\n' "$verificacoes" "$demos"
+printf '%d verificações e %d programas de exemplo e de solução executados com sucesso.\n' \
+    "$verificacoes" "$demos"
