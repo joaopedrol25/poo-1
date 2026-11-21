@@ -1,0 +1,11 @@
+# Saídas de compilação
+*.class
+build/
+out/
+target/
+
+# Arquivos locais de IDE e sistema
+.idea/
+.vscode/
+*.iml
+.DS_Store
